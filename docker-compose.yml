@@ -1,0 +1,52 @@
+version: '3'
+
+services:
+  # api:
+  #   build: .
+  #   volumes:
+  #     - .:/app
+  #   ports:
+  #     - "3006:3006"
+  #   networks:
+  #   - iot-platform
+  #   depends_on:
+  #     - mqttServer
+  #     # - mysqlDB
+  script_mqtt:
+    build: ./docker/mqtt
+    volumes:
+      - .:/app/serverMqtt
+    networks:
+    - iot-platform
+    depends_on:
+      - mqttServer
+      # - mysqlDB
+
+  # mysqlDB:
+  #   image: mysql:5.7
+  #   environment: 
+  #     MYSQL_ROOT_PASSWORD: "minhasenha"
+  #     MYSQL_DATABASE: "fabianopescarias_dev"
+  #   ports:
+  #     - "3306:3306"
+  #   volumes:
+  #     - ./var/www:/var/www
+  #   networks:
+  #     - iot-platform
+
+  # adminer:
+  #   image: adminer
+  #   ports:
+  #     - 8080:8080
+  #   networks:
+  #     - iot-platform
+  
+  mqttServer:
+    image: eclipse-mosquitto
+    ports:
+      - 1883:1883
+    networks:
+      - iot-platform
+networks:
+  iot-platform:
+    driver: bridge
